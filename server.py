@@ -107,4 +107,4 @@ def app(environ, start_response, *args, **kwargs):
             print(e)
 
         start_response('302 Found', [('Location','http://facebook.com')])
-        return iter('hello'.encode('utf-8'))
+        return iter(['hello'.encode('utf-8')])
