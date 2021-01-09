@@ -49,6 +49,16 @@ header {
   height: 82px;
   width: 980px;
 }
+
+.facebook-logo{
+  margin: 0;
+  padding: 0;
+  margin: 0px 0 0 0;
+  height: 0px;
+  width: 171px;
+  float: left;
+  visibility: hidden;
+}
 .fblogo {
   margin: 0;
   padding: 0;

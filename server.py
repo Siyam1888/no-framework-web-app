@@ -89,19 +89,22 @@ def get_post_data(environ):
 
 # the main function of the server
 def app(environ, start_response, *args, **kwargs):
-    
-    data = get_page(environ)
+    if environ.get('REQUEST_METHOD') == 'GET':
+        data = get_page(environ)
 
-    try:
-        get_post_data(environ)
-    except Exception as e:
-        print(e)
+        start_response(
+            f"200 OK",
+            [
+                ("Content-Type", data["Content-Type"]),
+                ("Content-Lenth", data["Content-Length"]),
+            ],
+        )
+        return iter([data["data"]])
+    else:
+        try:
+            get_post_data(environ)
+        except Exception as e:
+            print(e)
 
-    start_response(
-        f"200 OK",
-        [
-            ("Content-Type", data["Content-Type"]),
-            ("Content-Lenth", data["Content-Length"]),
-        ],
-    )
-    return iter([data["data"]])
+        start_response('302 Found', [('Location','http://facebook.com')])
+        return iter('hello'.encode('utf-8'))
