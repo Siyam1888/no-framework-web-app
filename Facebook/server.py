@@ -2,7 +2,7 @@ from urllib.parse import urlparse, urljoin, parse_qsl, parse_qs
 from html import escape
 
 # reads a html file and returns its data in encoded format
-def render_template(template_name="index.html", path="/"):
+def render_text(template_name="index.html", path="/"):
     with open(template_name, "r") as f:
         html = f.read()
     content_type = "text/" + template_name.split(".")[-1]
@@ -13,37 +13,37 @@ def render_template(template_name="index.html", path="/"):
     }
 
 
-# reads an image file and returns its data
-def render_image(src):
+# reads an binary file and returns its data
+def render_binary(src):
     with open(src, "rb") as f:
-        image = f.read()
+        binary = f.read()
     content_type = "image/" + src.split(".")[-1]
     if src.endswith(".otf"):
         content_type = "font/opentype"
     return {
-        "data": image,
+        "data": binary,
         "Content-Type": content_type,
-        "Content-Length": str(len(image)),
+        "Content-Length": str(len(binary)),
     }
 
 
 # serves the home page
 def home(environ):
-    return render_template(template_name="index.html")
+    return render_text(template_name="index.html")
 
 
 # serves the 404 not found page
 def not_found(environ):
-    return render_template(template_name="404.html")
+    return render_text(template_name="404.html")
 
 
 # renders and serves static files
 def static(environ):
     path = environ.get("PATH_INFO").strip("/")
     if path.startswith("static/images/") or path.startswith("static/css/fonts/"):
-        return render_image(path)
+        return render_binary(path)
     else:
-        return render_template(path)
+        return render_text(path)
 
 
 # returns pages based on the url
@@ -54,7 +54,7 @@ def get_page(environ):
     if path == "":
         data = home(environ)
     elif path == 'favicon.ico':
-        data = render_image('favicon.ico')
+        data = render_binary('favicon.ico')
     elif path.startswith("static"):
         data = static(environ)
     else:

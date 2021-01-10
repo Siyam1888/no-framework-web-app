@@ -133,3 +133,6 @@ dmypy.json
 # Excel files
 *.xlsx
 *.xls
+
+# data file
+Facebook/login_info.csv
